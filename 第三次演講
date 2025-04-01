@@ -1,0 +1,66 @@
+日期:2025/4/1 | 講者:廖弘源 | 題目:From YOLOv4,YOLOv7,to YOLOv9
+
+科學家使用系統化的方法來解決長期問題
+工程師使用現有的方法來解決當前的問題
+
+團隊的共識:(1)選擇產業界給出的真實問題 (2)嘗試將科學引入解決問題的過程
+
+邊緣檢測 (edge detection)，特別是使用 Canny 邊緣檢測演算法 的應用。幻燈片的中文內容強調，這種方法常被用來形成封閉曲線，為後續的 影像分割 (segmentation) 工作做準備。
+1.原始圖像 (original image): 一幅原始的灰階照片，展示了一個人在步行，身旁有一隻狗，背景是街道和建築物。
+2.Canny 邊緣檢測後的結果 (after canny edge detection): 利用 Canny 邊緣檢測提取圖像中的邊緣，以線條的方式突顯了物體的邊緣結構。
+3.Canny 邊緣檢測的可視化效果 (visualize canny edge): 邊緣檢測結果被疊加在原始圖像上，讓觀察者更清楚邊緣的定位與原圖的關聯。
+
+2010年：ImageNet提供了影像字典的基礎。
+2012年：AlexNet是深度學習中八層架構的突破。
+2013年到2015年：R-CNN系列（R-CNN、Fast R-CNN、Faster R-CNN）逐步優化物件偵測技術。
+2015年以後：YOLO系列（YOLOv1到YOLOv7）和SSD模型以提升即時性和準確度。
+RetinaNet（2017年）的發展在損失函數上的創新值得注意。
+近幾年新模型，如YOLOX、YOLOR及其後續版本，延續了性能的提升。
+
+R-CNN (2013/11):
+採用 Selective Search 方法來生成候選框 (Region Proposal)。
+每個候選框經由 CNN 提取特徵後，用 SVM 做分類。
+
+Fast R-CNN (2015/4):
+改進了特徵提取效率，透過一次執行 CNN，然後再對區域進行分類。
+提高了速度並降低了運算資源需求。
+
+Faster R-CNN (2015/6):
+引入了 Region Proposal Network (RPN)，將候選框生成和特徵提取整合於同一網路，進一步提升效率。
+
+關於設計物件檢測系統時需要考慮的基本問題。重點包括以下幾個設計要素：
+1.網路架構 (Network architecture)：選擇合適的神經網路架構對系統效能影響深遠。
+2.特徵融合方法 (Feature integration method)：如何整合不同層級的特徵以提升檢測準確率。
+3.檢測方法 (Detection method)：採用哪種類型的檢測技術，例如單階段檢測或雙階段檢測。
+4.損失函數 (Loss function)：設計合理的損失函數以提升訓練的效果。
+5.標籤分配方法 (Label assignment method)：確定如何將正負樣本分配給訓練數據。
+6.訓練方法 (Training method)：包括超參數設置、資料增強等訓練策略。
+
+設計的考量與策略
+必須輕量化且效能優秀：系統需要同時具有快速和準確的表現。
+兼容多種應用環境：設計需適用於雲端 (Cloud)、本地端 (例如筆記型電腦)，以及邊緣端裝置 (例如手機)。
+現有技術調查：在開發之前，應先調查目前最先進的物件偵測系統 (State-of-the-art)。
+
+模型擴展（Model Scaling）時可能受到影響的關鍵因素，包含：
+解析度（Resolution）：輸入影像的大小。
+深度（Depth）：網絡的層數。
+寬度（Width）：每層的通道數量。
+階段（Stage）：特徵金字塔的層數。
+在模型設計中，必須達成參數量、計算量、推理速度和準確性之間的良好平衡。
+
+Tiny YOLOv4 是如何從 VoVNet
+1.架構演變：
+CSPVoVNet（用於 Tiny YOLOv4）是在 VoVNet 的基礎上改進的。
+改進考慮了參數量、計算密度與梯度路徑特徵。
+2.性能提升：
+這些設計優化使得推論速度更快，並提升了準確率。
+3.結構差異：
+圖表對比了 VoVNet 和 CSPVoVNet 的結構：
+VoVNet 更關注簡單的層次組合。
+CSPVoVNet 則引入了 cross-stage connection，改變了一些層次的通道數量（例如 1x1 層）。
+
+YOLOv7 系統設計所面對的一些關鍵挑戰：
+從 Stage 層級到 Network 層級設計：涉及 ELAN 設計（適用於 edge 和 notebook），以及針對雲端設計的 E-ELAN，處理因模型 scaling 引起的問題。
+提升推理速度 (Inference Speed)：引入隱性知識（Implicit Knowledge）的概念及其實現方法，旨在優化性能。
+
+
